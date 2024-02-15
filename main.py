@@ -17,6 +17,8 @@
 # along with hilite.me.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import markdown
+
 from urllib.parse import quote, unquote
 
 from flask import Flask, make_response, render_template, request
@@ -80,8 +82,9 @@ def api():
     # Was the 'code' variable provided?
     code = request.values.get('code', '')
     if not code:
-        response = make_response(render_template('api.txt'))
-        response.headers["Content-Type"] = "text/plain"
+        mdContent = render_template('api.md')
+        response = make_response(markdown.markdown(mdContent))
+        response.headers["Content-Type"] = "text/html"
         return response
 
     # Read the other variables (with fallbacks to defaults)
