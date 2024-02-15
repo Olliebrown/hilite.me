@@ -83,7 +83,7 @@ def api():
     code = request.values.get('code', '')
     if not code:
         mdContent = render_template('api.md')
-        response = make_response(markdown.markdown(mdContent))
+        response = make_response(markdown.markdown(mdContent, output_format='html', tab_length=2))
         response.headers["Content-Type"] = "text/html"
         return response
 
