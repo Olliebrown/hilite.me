@@ -22,19 +22,27 @@ from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 def hilite_me(code, lexer, options, style, linenos, divstyles):
+    # Fallback to defaults when a variable is empty
     lexer = lexer or 'python'
     style = style or 'colorful'
+
+    # Default styles we always want included
     defstyles = 'overflow:auto;width:auto;'
 
+    # Create Pygments HtmlFormatter
     formatter = HtmlFormatter(style=style,
                               linenos=False,
                               noclasses=True,
                               cssclass='',
                               cssstyles=defstyles + divstyles,
                               prestyles='margin: 0')
+
+    # Generate HTML and optionally insert line numbers
     html = highlight(code, get_lexer_by_name(lexer, **options), formatter)
     if linenos:
         html = insert_line_numbers(html)
+
+    # Add comment about hilite.me and return
     html = "<!-- HTML generated using hilite.me -->" + html
     return html
 
@@ -42,16 +50,23 @@ def get_default_style():
     return 'border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;'
 
 def insert_line_numbers(html):
+    # Use regex to extract specific parts from the HTML
     match = re.search('(<pre[^>]*>)(.*)(</pre>)', html, re.DOTALL)
     if not match: return html
 
+    # Extract match groups to variables
     pre_open = match.group(1)
     pre = match.group(2)
     pre_close = match.group(3)
 
-    html = html.replace(pre_close, '</pre></td></tr></table>')
+    # Generate the line numbers with proper padding and formatting
     numbers = range(1, pre.count('\n') + 1)
     format = '%' + str(len(str(numbers[-1]))) + 'i'
     lines = '\n'.join(format % i for i in numbers)
+
+    # Rewrite each part of the HTML with the line numbers embedded
+    html = html.replace(pre_close, '</pre></td></tr></table>')
     html = html.replace(pre_open, '<table><tr><td>' + pre_open + lines + '</pre></td><td>' + pre_open)
+
+    # Return the html with the injected line numbers
     return html

@@ -1,4 +1,4 @@
-Maintainer
+Creator
 ----------
 
 *   Alexander Kojevnikov <alexander@kojevnikov.com>
@@ -6,4 +6,6 @@ Maintainer
 Contributors
 ------------
 
-*   You?
+*   Dustin: https://github.com/dustinla
+*   Reiner Rottmann: https://github.com/rrottmann
+*   Seth Berrier: https://github.com/Olliebrown
